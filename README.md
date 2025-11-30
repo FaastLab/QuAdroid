@@ -73,9 +73,11 @@ Core Services:
 
 ```env
 # OpenAI (Required)
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=
 
 # Database (Auto-configured in Docker)
+## pls change this password 
+
 POSTGRES_PASSWORD=postgres123
 
 # Optional
