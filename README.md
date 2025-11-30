@@ -1,4 +1,4 @@
-# TestPilot Core - Open Source AI-Powered E2E Testing
+# QuADroid Core - Open Source AI-Powered E2E Testing
 
 🚀 **AI-powered end-to-end testing made simple** - Crawl any website, generate Playwright tests automatically, and get beautiful test reports.
 
@@ -149,5 +149,8 @@ Apache License 2.0 - see [LICENSE](LICENSE) for details.
 ---
 
 **Made with ❤️ for the testing community**
+
+
+
 
 
