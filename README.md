@@ -23,14 +23,14 @@ TODO: Registration - credentials need to be passed - will be releasing in the ne
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/testpilot-core
-cd testpilot-core
+git clone https://github.com/FaastLab/QuAdroid
+cd QuAdroid
 ```
 
 2. **Set environment variables**
 ```bash
 cd docker
-cp .env.example .env
+notepad .env
 # Edit .env and add your OPENAI_API_KEY
 ```
 
@@ -129,8 +129,3 @@ Apache License 2.0 - see [LICENSE](LICENSE) for details.
 ---
 
 **Made with ❤️ for the testing community**
-
-
-
-
-
