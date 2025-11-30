@@ -5,11 +5,13 @@
 ## Features
 
 ✅ **Intelligent Web Crawler** - Discovers pages, forms, buttons, and interactive components  
-✅ **AI Test Generation** - GPT-4 powered test script generation from crawl data  
+✅ **AI Test Generation** - AI powered test script generation from crawl data  
 ✅ **Playwright Execution** - Runs comprehensive E2E tests with screenshots & videos  
 ✅ **Allure Reports** - Beautiful, interactive HTML test reports  
 ✅ **Multi-Worker Architecture** - Isolated, scalable microservices  
 ✅ **100% Open Source** - Apache 2.0 License  
+
+TODO: Registration - credentials need to be passed - will be releasing in the next version
 
 ## Quick Start
 
@@ -116,35 +118,11 @@ core/
     ├── web-crawler.Dockerfile
     └── user-journey.Dockerfile
 ```
-
-## 🌟 Enterprise Edition
-
-Looking for advanced features?
-
-**Enterprise modules include:**
-- 🔐 **Multi-tenancy** - Teams, organizations, user management
-- 💳 **Billing Integration** - Stripe subscriptions, usage tracking
-- 🛡️ **Advanced Security Testing** - Deep pentesting, OWASP ZAP
-- 🤖 **Additional Workers** - API testing, DB checks, CI/CD integration
-- 📊 **Analytics Dashboard** - Test trends, success rates, insights
-- 🔄 **FlowiseAI Integration** - Visual AI flow editor for test logic
-- ☁️ **Cloud Deployment** - Managed hosting, scaling, support
-
-👉 **[Contact us for enterprise license](mailto:your@email.com)**
-
-## Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
 ## License
 
 Apache License 2.0 - see [LICENSE](LICENSE) for details.
 
 ## Support
-
-- 📖 [Documentation](https://github.com/yourusername/testpilot-core/wiki)
-- 🐛 [Report Issues](https://github.com/yourusername/testpilot-core/issues)
-- 💬 [Discussions](https://github.com/yourusername/testpilot-core/discussions)
 
 ---
 
