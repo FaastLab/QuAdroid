@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestPilot Core - AI E2E Testing</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #667eea; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { color: #666; margin-bottom: 30px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; margin-bottom: 20px; }
+        input:focus { outline: none; border-color: #667eea; }
+        button { width: 100%; padding: 14px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        button:hover { background: #5568d3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .result { margin-top: 30px; padding: 20px; border-radius: 8px; display: none; }
+        .result.show { display: block; }
+        .result.success { background: #d4edda; color: #155724; }
+        .result.error { background: #f8d7da; color: #721c24; }
+        .status { margin-top: 20px; padding: 15px; background: #f7f7f7; border-radius: 8px; }
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge.pending { background: #fef3cd; color: #856404; }
+        .badge.crawling { background: #d1ecf1; color: #0c5460; }
+        .badge.generating { background: #d6d8fc; color: #383d96; }
+        .badge.testing { background: #fff3cd; color: #856404; }
+        .badge.completed { background: #d4edda; color: #155724; }
+        .badge.failed { background: #f8d7da; color: #721c24; }
+        .footer { text-align: center; margin-top: 30px; color: white; opacity: 0.9; }
+        .footer a { color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🚀 TestPilot Core</h1>
+            <p class="subtitle">AI-Powered E2E Testing - Open Source</p>
+            
+            <form id="testForm">
+                <label for="url">Website URL</label>
+                <input type="url" id="url" placeholder="https://example.com" required>
+                
+                <button type="submit" id="submitBtn">Start AI Testing</button>
+            </form>
+
+            <div id="result" class="result"></div>
+            <div id="status" class="status" style="display:none;"></div>
+        </div>
+
+        <div class="footer">
+            <p>Open Source • Apache 2.0 License</p>
+            <p><a href="https://github.com/FaastLab/QuAdroid" target="_blank">⭐ Star on GitHub</a> | Looking for Enterprise? <a href="mailto:info@faastlab.ai">Contact Us</a></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('testForm')
+        const submitBtn = document.getElementById('submitBtn')
+        const result = document.getElementById('result')
+        const status = document.getElementById('status')
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            const url = document.getElementById('url').value
+            submitBtn.disabled = true
+            submitBtn.textContent = 'Submitting...'
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                })
+
+                const data = await response.json()
+
+                if (response.ok) {
+                    result.className = 'result success show'
+                    result.innerHTML = `✅ Test submitted! Job ID: <strong>${data.jobId}</strong>`
+                    status.style.display = 'block'
+                    pollStatus(data.jobId)
+                } else {
+                    throw new Error(data.error)
+                }
+            } catch (error) {
+                result.className = 'result error show'
+                result.textContent = `❌ Error: ${error.message}`
+                submitBtn.disabled = false
+                submitBtn.textContent = 'Start AI Testing'
+            }
+        })
+
+        async function pollStatus(jobId) {
+            try {
+                const response = await fetch(`/api/report/${jobId}`)
+                const data = await response.json()
+
+                const statusBadge = `<span class="badge ${data.status}">${data.status.toUpperCase()}</span>`
+                
+                let statusHtml = `<strong>Job Status:</strong> ${statusBadge}<br><small>Updated: ${new Date(data.updated_at).toLocaleString()}</small>`
+
+                if (data.status === 'completed' && data.report_path) {
+                    statusHtml += `<br><br><a href="${data.report_path}" target="_blank" style="color: #667eea; font-weight: 600;">📊 View Allure Report</a>`
+                    submitBtn.disabled = false
+                    submitBtn.textContent = 'Start AI Testing'
+                } else if (data.status === 'failed') {
+                    statusHtml += `<br><br><span style="color: #dc3545;">Error: ${data.error}</span>`
+                    submitBtn.disabled = false
+                    submitBtn.textContent = 'Start AI Testing'
+                } else {
+                    setTimeout(() => pollStatus(jobId), 3000)
+                }
+
+                status.innerHTML = statusHtml
+            } catch (error) {
+                console.error('Poll error:', error)
+                setTimeout(() => pollStatus(jobId), 3000)
+            }
+        }
+    </script>
+</body>
+</html>
+
+

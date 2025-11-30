@@ -1,0 +1,33 @@
+{
+  "name": "@testpilot/user-journey-worker",
+  "version": "1.0.0",
+  "description": "User Journey Worker - Generates and executes E2E Playwright tests",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "@playwright/test": "^1.40.0",
+    "allure-commandline": "^2.25.0",
+    "allure-playwright": "^2.15.1",
+    "bullmq": "^5.1.0",
+    "ioredis": "^5.3.2",
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1",
+    "openai": "^4.20.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
+
+
+
+
+
+

@@ -1,0 +1,94 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: testpilot_core
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - testpilot-core
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - testpilot-core
+
+  web-crawler:
+    build:
+      context: ..
+      dockerfile: docker/web-crawler.Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=testpilot_core
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - WORKER_REPORT_PATH=/app/reports
+    volumes:
+      - reports-data:/app/reports
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    networks:
+      - testpilot-core
+
+  user-journey:
+    build:
+      context: ..
+      dockerfile: docker/user-journey.Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=testpilot_core
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - WORKER_REPORT_PATH=/app/reports
+    volumes:
+      - reports-data:/app/reports
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    networks:
+      - testpilot-core
+
+  simple-ui:
+    build:
+      context: ..
+      dockerfile: docker/simple-ui.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=testpilot_core
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - reports-data:/app/reports
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - testpilot-core
+
+networks:
+  testpilot-core:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  reports-data:
+

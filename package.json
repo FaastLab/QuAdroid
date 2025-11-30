@@ -1,0 +1,23 @@
+{
+  "name": "testpilot-core",
+  "version": "1.0.0",
+  "description": "TestPilot Core - Open Source AI-Powered E2E Testing",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "apps/workers/*",
+    "apps/shared"
+  ],
+  "scripts": {
+    "install-all": "npm install && cd apps/workers/web-crawler && npm install && cd ../user-journey && npm install",
+    "dev": "echo 'Use docker-compose up in docker/ folder'",
+    "docker:up": "cd docker && docker compose up",
+    "docker:build": "cd docker && docker compose up --build -d"
+  },
+  "keywords": ["testing", "e2e", "playwright", "ai", "automation"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/testpilot-core"
+  }
+}
+
+
