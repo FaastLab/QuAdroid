@@ -11,7 +11,7 @@ app.use(express.static('public'))
 // PostgreSQL connection
 const pool = new Pool({
   host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'testpilot_core',
+  database: process.env.POSTGRES_DB || 'quadroid_core',
   user: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres123',
   port: 5432,
@@ -34,6 +34,7 @@ async function initDatabase() {
       CREATE TABLE IF NOT EXISTS test_jobs (
         id TEXT PRIMARY KEY,
         url TEXT NOT NULL,
+        credentials JSONB,
         status TEXT NOT NULL CHECK (status IN ('pending', 'crawling', 'crawl_completed', 'generating', 'testing', 'completed', 'failed')),
         workers TEXT[] DEFAULT ARRAY['web-crawler', 'user-journey'],
         crawl_data JSONB,
@@ -53,7 +54,7 @@ initDatabase()
 
 // Submit test
 app.post('/api/submit', async (req, res) => {
-  const { url } = req.body
+  const { url, credentials } = req.body
   
   if (!url || !url.startsWith('http')) {
     return res.status(400).json({ error: 'Invalid URL' })
@@ -63,11 +64,11 @@ app.post('/api/submit', async (req, res) => {
 
   try {
     await pool.query(
-      'INSERT INTO test_jobs (id, url, status) VALUES ($1, $2, $3)',
-      [jobId, url, 'pending']
+      'INSERT INTO test_jobs (id, url, credentials, status) VALUES ($1, $2, $3, $4)',
+      [jobId, url, credentials ? JSON.stringify(credentials) : null, 'pending']
     )
 
-    await webCrawlerQueue.add('crawl', { jobId, url })
+    await webCrawlerQueue.add('crawl', { jobId, url, credentials })
 
     res.json({ jobId, message: 'Test submitted successfully' })
   } catch (error) {
@@ -96,6 +97,6 @@ app.get('/api/report/:id', async (req, res) => {
 app.use('/reports', express.static('/app/reports'))
 
 app.listen(8080, () => {
-  console.log('TestPilot Core UI running on http://localhost:8080')
+  console.log('QuADroid Core UI running on http://localhost:8080')
 })
 

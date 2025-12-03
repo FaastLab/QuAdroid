@@ -36,14 +36,23 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>🚀 TestPilot Core</h1>
+            <h1>🚀 QuADroid Core</h1>
             <p class="subtitle">AI-Powered E2E Testing - Open Source</p>
             
             <form id="testForm">
                 <label for="url">Website URL</label>
                 <input type="url" id="url" placeholder="https://example.com" required>
                 
-                <button type="submit" id="submitBtn">Start AI Testing</button>
+                <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <p style="margin-bottom: 15px; font-weight: 600; color: #333;">🔐 Login Credentials (Optional)</p>
+                    <label for="username">Username / Email</label>
+                    <input type="text" id="username" placeholder="user@example.com">
+                    
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" id="submitBtn" style="margin-top: 20px;">Start AI Testing</button>
             </form>
 
             <div id="result" class="result"></div>
@@ -66,14 +75,19 @@
             e.preventDefault()
             
             const url = document.getElementById('url').value
+            const username = document.getElementById('username').value
+            const password = document.getElementById('password').value
             submitBtn.disabled = true
             submitBtn.textContent = 'Submitting...'
+
+            // Build credentials object only if provided
+            const credentials = (username || password) ? { username, password } : null
 
             try {
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
+                    body: JSON.stringify({ url, credentials })
                 })
 
                 const data = await response.json()
@@ -124,6 +138,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

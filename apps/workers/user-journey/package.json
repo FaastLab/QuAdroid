@@ -1,5 +1,5 @@
 {
-  "name": "@testpilot/user-journey-worker",
+  "name": "@quadroid/user-journey-worker",
   "version": "1.0.0",
   "description": "User Journey Worker - Generates and executes E2E Playwright tests",
   "main": "src/main.ts",

@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: testpilot_core
+      POSTGRES_DB: quadroid_core
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
     ports:
@@ -10,14 +10,14 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - testpilot-core
+      - quadroid-core
 
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
     networks:
-      - testpilot-core
+      - quadroid-core
 
   web-crawler:
     build:
@@ -25,7 +25,7 @@ services:
       dockerfile: docker/web-crawler.Dockerfile
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_DB=testpilot_core
+      - POSTGRES_DB=quadroid_core
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
       - REDIS_HOST=redis
@@ -38,7 +38,7 @@ services:
       - postgres
     restart: unless-stopped
     networks:
-      - testpilot-core
+      - quadroid-core
 
   user-journey:
     build:
@@ -46,7 +46,7 @@ services:
       dockerfile: docker/user-journey.Dockerfile
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_DB=testpilot_core
+      - POSTGRES_DB=quadroid_core
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
       - REDIS_HOST=redis
@@ -60,7 +60,7 @@ services:
       - postgres
     restart: unless-stopped
     networks:
-      - testpilot-core
+      - quadroid-core
 
   simple-ui:
     build:
@@ -70,7 +70,7 @@ services:
       - "8080:8080"
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_DB=testpilot_core
+      - POSTGRES_DB=quadroid_core
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
       - REDIS_HOST=redis
@@ -82,10 +82,10 @@ services:
       - redis
     restart: unless-stopped
     networks:
-      - testpilot-core
+      - quadroid-core
 
 networks:
-  testpilot-core:
+  quadroid-core:
     driver: bridge
 
 volumes:

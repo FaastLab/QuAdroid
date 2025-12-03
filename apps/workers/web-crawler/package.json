@@ -1,5 +1,5 @@
 {
-  "name": "@testpilot/web-crawler-worker",
+  "name": "@quadroid/web-crawler-worker",
   "version": "1.0.0",
   "description": "Web Crawler Worker - Discovers pages, forms, and interactive components",
   "main": "src/main.ts",
